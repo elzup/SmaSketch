@@ -6,7 +6,7 @@ const style = require('styles/App.css')
 
 import React from 'react'
 
-class AppComponent extends React.Component {
+export default class MainComponent extends React.Component {
 	render() {
 		return (
 			<div>
@@ -31,6 +31,8 @@ class AppComponent extends React.Component {
 			</div>
 		)
 	}
+
+	static defaultComponent = {}
 
 	componentDidMount() {
 
@@ -167,7 +169,3 @@ class AppComponent extends React.Component {
 	}
 
 }
-
-AppComponent.defaultProps = {}
-
-export default AppComponent
