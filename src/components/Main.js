@@ -2,7 +2,7 @@ import io from 'socket.io-client'
 import $ from 'jquery'
 
 require('normalize.css/normalize.css')
-const style = require('styles/App.css')
+require('styles/App.css')
 
 import React from 'react'
 
@@ -10,10 +10,10 @@ export default class MainComponent extends React.Component {
 	render() {
 		return (
 			<div>
-				<h1 className={style.title}>Sma Sketch</h1>
-				<div className={style.main}>
-					<div className={style.clear}></div>
-					<div className={style.canvas}>
+				<h1 className="title">Sma Sketch</h1>
+				<div className="main">
+					<div className="clear"></div>
+					<div className="canvas">
 						<canvas id="myCanvas"></canvas>
 					</div>
 				</div>
@@ -50,14 +50,15 @@ export default class MainComponent extends React.Component {
 		// Canvas描画に必要な変数を定義する
 		var canvas = document.getElementById('myCanvas')
 		var c = canvas.getContext('2d')
-		var w = 450
-		var h = 400
 		var drawing = false
 		var oldPos
 
+		var w = window.innerWidth
+		var h = window.innerHeight
+		canvas.width = w - 20
+		canvas.height = h - 100
+
 		// Canvasを初期化する
-		canvas.width = w
-		canvas.height = h
 		c.strokeStyle = '#000000'
 		c.lineWidth = 5
 		c.lineJoin = 'round'

@@ -5,15 +5,15 @@
 }
 
 body {
-	width: 500px;
 }
 
 .title {
 	padding: 10px;
+	margin: 10px 0 0 10px;
 }
 
 .main {
-	padding-left: 10px;
+	padding: 10px;
 	margin: auto;
 }
 
@@ -36,14 +36,11 @@ body {
 }
 
 .canvas {
-	width: 450px;
-	height: 400px;
 	border: 1px solid #ccc;
 }
 
 .canvas canvas {
-	width: 450px;
-	height: 400px;
+	width: 100%;
 }
 
 
