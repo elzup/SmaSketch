@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import $ from 'jquery'
+import pos from 'dom.position'
 
 require('normalize.css/normalize.css')
 require('styles/App.css')
@@ -13,7 +13,7 @@ export default class MainComponent extends React.Component {
 				<h1 className="title">Sma Sketch</h1>
 				<div className="main">
 					<div className="canvas">
-						<canvas id="myCanvas" />
+						<canvas id="myCanvas"/>
 					</div>
 				</div>
 			</div>
@@ -59,23 +59,15 @@ export default class MainComponent extends React.Component {
 		c.lineJoin = 'round'
 		c.lineCap = 'round'
 
-		function scrollX() {
-			return document.documentElement.scrollLeft || document.body.scrollLeft
-		}
-
-		function scrollY() {
-			return document.documentElement.scrollTop || document.body.scrollTop
-		}
-
 		const getPosMouse = (event) => {
-			var mouseX = event.clientX - $(canvas).position().left + scrollX()
-			var mouseY = event.clientY - $(canvas).position().top + scrollY()
+			var mouseX = event.clientX - pos(canvas).left
+			var mouseY = event.clientY - pos(canvas).top
 			return {x: mouseX, y: mouseY}
 		}
 
 		const getPosTouch = (event) => {
-			var mouseX = event.touches[0].clientX - $(canvas).position().left + scrollX()
-			var mouseY = event.touches[0].clientY - $(canvas).position().top + scrollY()
+			var mouseX = event.touches[0].clientX - pos(canvas).left
+			var mouseY = event.touches[0].clientY - pos(canvas).top
 			return {x: mouseX, y: mouseY}
 		}
 
