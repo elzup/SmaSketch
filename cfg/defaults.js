@@ -4,11 +4,11 @@
  * Using [].push will add to the base array, so a require will alter
  * the base array output.
  */
-'use strict';
+'use strict'
 
-const path = require('path');
-const srcPath = path.join(__dirname, '/../src');
-const dfltPort = 8000;
+const path = require('path')
+const srcPath = path.join(__dirname, '/../src')
+const dfltPort = 8000
 
 /**
  * Get the default modules object for webpack
@@ -53,7 +53,7 @@ function getDefaultModules() {
 				loader: 'file-loader'
 			}
 		]
-	};
+	}
 }
 
 module.exports = {
@@ -61,4 +61,4 @@ module.exports = {
 	publicPath: '/assets/',
 	port: dfltPort,
 	getDefaultModules: getDefaultModules
-};
+}
