@@ -50,6 +50,15 @@ export default class SubComponent extends React.Component {
 		c.lineJoin = 'round'
 		c.lineCap = 'round'
 
+		const bounds = {
+			x1: 10,
+			y1: 10,
+			x2: 200,
+			y2: 200
+		}
+
+		socket.emit('new:sub', {bounds: bounds})
+
 		const getPosMouse = (event) => {
 			const mouseX = event.clientX - pos(canvas).left
 			const mouseY = event.clientY - pos(canvas).top

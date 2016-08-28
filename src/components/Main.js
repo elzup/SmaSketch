@@ -27,6 +27,7 @@ export default class MainComponent extends React.Component {
 		const socket = io.connect(window.location.hostname + ':8080')
 		const canvas = document.getElementById('myCanvas')
 		const c = canvas.getContext('2d')
+		const activeSubs = {}
 
 		canvas.width = window.innerWidth - pos(canvas).left - 10
 		canvas.height = window.innerHeight - pos(canvas).top - 10
@@ -43,6 +44,15 @@ export default class MainComponent extends React.Component {
 			c.lineTo(data.after.x, data.after.y)
 			c.stroke()
 			c.closePath()
+		})
+
+		socket.on('new:sub', data => {
+			console.log(data)
+			activeSubs[data.id] = data
+		})
+
+		socket.on('remove', data => {
+			delete activeSubs[data.id]
 		})
 	}
 }
