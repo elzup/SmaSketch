@@ -6,12 +6,23 @@ const style = require('styles/App.css')
 
 import React from 'react'
 
-export default class MainComponent extends React.Component {
+export default class SubComponent extends React.Component {
 	render() {
 		return (
 			<div>
 				<h1 className={style.title}>Sma Sketch</h1>
 				<div className={style.main}>
+					<div className={style.toolbar}>
+						<ul>
+							<li id="black"></li>
+							<li id="blue"></li>
+							<li id="red"></li>
+							<li id="green"></li>
+							<li id="small">S</li>
+							<li id="middle">M</li>
+							<li id="large">L</li>
+						</ul>
+					</div>
 					<div className={style.clear}></div>
 					<div className={style.canvas}>
 						<canvas id="myCanvas"></canvas>
@@ -25,27 +36,9 @@ export default class MainComponent extends React.Component {
 
 	componentDidMount() {
 
-		const stopDefault = (event) => {
-			if (event.touches[0].target.tagName.toLowerCase() == 'li') {
-				return
-			}
-			if (event.touches[0].target.tagName.toLowerCase() == 'input') {
-				return
-			}
-
-			event.preventDefault()
-		}
-
-		document.addEventListener('touchstart', stopDefault, false)
-		document.addEventListener('touchmove', stopDefault, false)
-		document.addEventListener('touchend', stopDefault, false)
-		document.addEventListener('gesturestart', stopDefault, false)
-		document.addEventListener('gesturechange', stopDefault, false)
-		document.addEventListener('gestureend', stopDefault, false)
-
 		// サーバーサイドのsocket.IOに接続する
 		// 接続出来たら、サーバー側のコンソールにconnected!と表示される
-		var socket = io.connect(window.location.hostname + ':8080')
+		var socket = io.connect('localhost:8080')
 
 		// Canvas描画に必要な変数を定義する
 		var canvas = document.getElementById('myCanvas')
@@ -72,16 +65,10 @@ export default class MainComponent extends React.Component {
 			return document.documentElement.scrollTop || document.body.scrollTop
 		}
 
-		const getPosMouse = (event) => {
+		function getPos(event) {
 			var mouseX = event.clientX - $(canvas).position().left + scrollX()
 			var mouseY = event.clientY - $(canvas).position().top + scrollY()
 			return {x: mouseX, y: mouseY}
-		}
-
-		const getPosTouch = (event) => {
-			var mouseX = event.touches[0].clientX - $(canvas).position().left + scrollX()
-			var mouseY = event.touches[0].clientY - $(canvas).position().top + scrollY()
-			return {x:mouseX, y:mouseY}
 		}
 
 		// function getPosT(event) {
@@ -91,41 +78,32 @@ export default class MainComponent extends React.Component {
 		// }
 
 
-		const touchStart = getPos => {
-			return (event) => {
-				console.log('mousedown')
-				drawing = true
-				oldPos = getPos(event)
-			}
-		}
-		canvas.addEventListener('mousedown', touchStart(getPosMouse), false)
-		canvas.addEventListener('touchstart', touchStart(getPosTouch), false)
-
-		const touchEnd = () => {
+		// ここからは、Canvasに描画する為の処理
+		canvas.addEventListener('mousedown', event => {
+			console.log('mousedown')
+			drawing = true
+			oldPos = getPos(event)
+		}, false)
+		canvas.addEventListener('mouseup', () => {
 			console.log('mouseup')
 			drawing = false
-		}
-		canvas.addEventListener('mouseup', touchEnd, false)
-		canvas.addEventListener('touchend', touchEnd, false)
+		}, false)
+		canvas.addEventListener('mousemove', (event) => {
+			var pos = getPos(event)
+			console.log('mousemove : x=' + pos.x + ', y=' + pos.y + ', drawing=' + drawing)
+			if (drawing) {
+				c.beginPath()
+				c.moveTo(oldPos.x, oldPos.y)
+				c.lineTo(pos.x, pos.y)
+				c.stroke()
+				c.closePath()
 
-		const touchMove = (getPos) => {
-			return (event) => {
-				var pos = getPos(event)
-				console.log('mousemove : x=' + pos.x + ', y=' + pos.y + ', drawing=' + drawing)
-				if (drawing) {
-					c.beginPath()
-					c.moveTo(oldPos.x, oldPos.y)
-					c.lineTo(pos.x, pos.y)
-					c.stroke()
-					c.closePath()
-					socket.emit('draw', {before: oldPos, after: pos})
-					oldPos = pos
-				}
+				// socket.IOサーバーに、
+				// どの点からどの点までを描画するかをの情報を送付する
+				socket.emit('draw', {before: oldPos, after: pos})
+				oldPos = pos
 			}
-		}
-		canvas.addEventListener('mousemove', touchMove(getPosMouse), false)
-		canvas.addEventListener('touchmove', touchMove(getPosTouch), false)
-
+		}, false)
 		canvas.addEventListener('mouseout', () => {
 			console.log('mouseout')
 			drawing = false

@@ -20,6 +20,10 @@ body {
 .toolbar {
 }
 
+.toolbar ul {
+	display: flex;
+}
+
 .toolbar li {
 	width: 44px;
 	height: 44px;
@@ -29,41 +33,6 @@ body {
 	border-radius: 6px;
 	margin: 10px;
 	display: block;
-	float: left;
-}
-
-#black {
-	background-color: black;
-}
-
-#red {
-	background-color: red;
-}
-
-#green {
-	background-color: green;
-}
-
-#blue {
-	background-color: blue;
-}
-
-#small {
-	text-align: center;
-	line-height: 44px;
-	font-size: 100%;
-}
-
-#middle {
-	text-align: center;
-	line-height: 44px;
-	font-size: 200%;
-}
-
-#large {
-	text-align: center;
-	line-height: 44px;
-	font-size: 400%;
 }
 
 .canvas {
