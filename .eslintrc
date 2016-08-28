@@ -25,7 +25,7 @@
     "no-extra-semi": 1,
     "semi": [2, "never"],
     "no-underscore-dangle": 0,
-    "no-console": 1,
+    "no-console": 0,
     "no-unused-vars": 1,
     "no-trailing-spaces": [1, { "skipBlankLines": true }],
     "no-unreachable": 1,
