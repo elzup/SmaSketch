@@ -6,11 +6,11 @@ require('styles/App.css')
 
 import React from 'react'
 
-export default class MainComponent extends React.Component {
+export default class SubComponent extends React.Component {
 	render() {
 		return (
 			<div>
-				<h1 className="title">Sma Sketch</h1>
+				<h1 className="title_con">Sma Sketch</h1>
 				<div className="main">
 					<div className="canvas">
 						<canvas id="myCanvas" />
@@ -76,7 +76,7 @@ export default class MainComponent extends React.Component {
 		const getPosTouch = (event) => {
 			var mouseX = event.touches[0].clientX - $(canvas).position().left + scrollX()
 			var mouseY = event.touches[0].clientY - $(canvas).position().top + scrollY()
-			return {x: mouseX, y: mouseY}
+			return {x:mouseX, y:mouseY}
 		}
 
 		const touchStart = getPos => {
@@ -119,6 +119,35 @@ export default class MainComponent extends React.Component {
 			drawing = false
 		}, false)
 
+		$('#black').click(() => {
+			c.strokeStyle = 'black'
+			socket.emit('color', 'black')
+		})
+		$('#blue').click(() => {
+			c.strokeStyle = 'blue'
+			socket.emit('color', 'blue')
+		})
+		$('#red').click(() => {
+			c.strokeStyle = 'red'
+			socket.emit('color', 'red')
+		})
+		$('#green').click(() => {
+			c.strokeStyle = 'green'
+			socket.emit('color', 'green')
+		})
+		$('#small').click(() => {
+			c.lineWidth = 5
+			socket.emit('lineWidth', 5)
+		})
+		$('#middle').click(() => {
+			c.lineWidth = 10
+			socket.emit('lineWidth', 10)
+		})
+		$('#large').click(() => {
+			c.lineWidth = 20
+			socket.emit('lineWidth', 20)
+		})
+
 		socket.on('draw', data => {
 			console.log('on draw : ' + data)
 			c.beginPath()
@@ -137,5 +166,7 @@ export default class MainComponent extends React.Component {
 			console.log('on lineWidth : ' + data)
 			c.lineWidth = data
 		})
+
 	}
+
 }
