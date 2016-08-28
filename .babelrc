@@ -1,7 +1,16 @@
 {
-	"presets": [
-		"es2015",
-		"stage-0",
-		"react"
-	]
+	"ava": {
+		"require": [
+			"babel-register"
+		],
+		"babel": "inherit"
+	},
+	"babel": {
+		"presets": [
+			"es2015",
+			"stage-0",
+			"react"
+		]
+	}
 }
+
