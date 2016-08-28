@@ -1,12 +1,8 @@
-/*eslint-env node, mocha */
-/*global expect */
-/*eslint no-console: 0*/
 'use strict'
 
-import config from 'config'
+import test from 'ava'
+import config from '../../webpack.config'
 
-describe('appEnvConfigTests', () => {
-	it('should load app config file depending on current --env', () => {
-		expect(config.appEnv).to.equal('test')
-	})
+test('should load app config file depending on current --env', t => {
+	t.is(config.port, 8000)
 })
