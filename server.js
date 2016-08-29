@@ -2,13 +2,15 @@
 
 'use strict'
 require('core-js/fn/object/assign')
-const webpack = require('webpack')
-const WebpackDevServer = require('webpack-dev-server')
-const config = require('./webpack.config')
 const open = require('open')
+const WebpackDevServer = require('webpack-dev-server')
+const webpack = require('webpack')
+const config = require('./webpack.config')
+
+require('core-js/fn/object/assign')
 
 new WebpackDevServer(webpack(config), config.devServer)
-	.listen(config.port, (err) => {
+	.listen(config.port, err => {
 		if (err) {
 			console.log(err)
 		}

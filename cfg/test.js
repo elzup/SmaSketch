@@ -1,12 +1,10 @@
 'use strict'
 
-let path = require('path')
-let srcPath = path.join(__dirname, '/../src/')
+const path = require('path')
+const baseConfig = require('./base')
+const BowerWebpackPlugin = require('bower-webpack-plugin')
 
-let baseConfig = require('./base')
-
-// Add needed plugins here
-let BowerWebpackPlugin = require('bower-webpack-plugin')
+const srcPath = path.join(__dirname, '/../src/')
 
 module.exports = {
 	devtool: 'eval',
