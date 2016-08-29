@@ -1,4 +1,4 @@
-# SmaSketch [![Build Status](https://travis-ci.org/elzup/smasketch.svg?branch=master)](https://travis-ci.org/elzup/smasketch)
+# SmaSketch [![Build Status](https://travis-ci.org/elzup/SmaSketch.svg?branch=master)](https://travis-ci.org/elzup/SmaSketch)
 
 > SmaSketch client application
 
@@ -15,6 +15,6 @@ npm start
 
 ## License
 
-MIT 息 [elzup](http://elzup.com)
+MIT 諱ｯ [elzup](http://elzup.com)
 
 
