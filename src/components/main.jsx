@@ -9,7 +9,7 @@ require('styles/App.css')
 export default class MainComponent extends React.Component {
 	render() {
 		return (
-			<body>
+			<div>
 			<h1 className="title">Sma Sketch Canvas</h1>
 			<div className="main">
 				<div className="canvas">
@@ -18,7 +18,7 @@ export default class MainComponent extends React.Component {
 					<div id="qr2" className="qr"/>
 				</div>
 			</div>
-			</body>
+			</div>
 		)
 	}
 
@@ -34,33 +34,10 @@ export default class MainComponent extends React.Component {
 			pencil: {strokeStyle: 'black', lineWidth: 5},
 			eraser: {strokeStyle: 'white', lineWidth: 30}
 		}
-		c.lineJoin = 'round'
-		c.lineCap = 'round'
-		socket.on('draw', data => {
-			console.log('on draw : ' + data)
-			data.before.x += data.offset.x
-			data.before.y += data.offset.y
-			data.after.x += data.offset.x
-			data.after.y += data.offset.y
-			Object.assign(c, canvasStyle[data.mode])
-			c.beginPath()
-			c.moveTo(data.before.x, data.before.y)
-			c.lineTo(data.after.x, data.after.y)
-			c.stroke()
-			c.closePath()
-		})
-		socket.on('new:sub', data => {
-			console.log(data)
-			activeSubs[data.id] = data
-		})
-		socket.on('remove', data => {
-			delete activeSubs[data.id]
-		})
 		const qrPoses = [
 			{x: 0, y: 0, vx: 4.5, vy: 5},
 			{x: w / 2, y: h / 2, vx: -5, vy: 5.5}
 		]
-		console.log('didMount')
 		const nextPos = p => {
 			p.x += p.vx
 			p.y += p.vy
@@ -71,7 +48,23 @@ export default class MainComponent extends React.Component {
 				p.vy *= -1
 			}
 		}
-		const updateQr = () => {
+		c.lineJoin = 'round'
+		c.lineCap = 'round'
+		socket.on('draw', data => {
+			Object.assign(c, canvasStyle[data.mode])
+			c.beginPath()
+			c.moveTo(data.before.x + data.offset.x, data.before.y + data.offset.y)
+			c.lineTo(data.after.x + data.offset.x, data.after.y + data.offset.y)
+			c.stroke()
+			c.closePath()
+		})
+		socket.on('new:sub', data => {
+			activeSubs[data.id] = data
+		})
+		socket.on('remove', data => {
+			delete activeSubs[data.id]
+		})
+		setInterval(() => {
 			[0, 1].forEach(i => {
 				nextPos(qrPoses[i])
 				const url = `http://${window.location.host}/sub?ox=${qrPoses[i].x}&oy=${qrPoses[i].y}`
@@ -79,7 +72,6 @@ export default class MainComponent extends React.Component {
 				qrBoxs[i].style.top = qrPoses[i].y + 'px'
 				qrBoxs[i].style.left = qrPoses[i].x + 'px'
 			})
-		}
-		setInterval(updateQr, 25)
+		}, 25)
 	}
 }

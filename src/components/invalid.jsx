@@ -6,12 +6,12 @@ require('styles/App.css')
 export default class INvalidComponent extends React.Component {
 	render() {
 		return (
-			<body>
+			<div>
 			<h1 className="title">Sma Sketch Canvas</h1>
 			<div className="mainText">
 				Invalid Access
 			</div>
-			</body>
+			</div>
 		)
 	}
 

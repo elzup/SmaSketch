@@ -1,8 +1,8 @@
 'use strict'
 
-import path from 'path'
-import baseConfig from './base'
-import BowerWebpackPlugin from 'bower-webpack-plugin'
+const path = require('path')
+const baseConfig = require('./base')
+const BowerWebpackPlugin = require('bower-webpack-plugin')
 
 const srcPath = path.join(__dirname, '/../src/')
 
