@@ -41,10 +41,21 @@ body {
 
 .canvas {
 	border: 1px solid #ccc;
+	position: relative;
 }
 
 .canvas canvas {
 	width: 100%;
+}
+
+.qr {
+	width: 5em;
+	height: 5em;
+}
+
+.qr svg {
+	width: 100%;
+	height: 100%;
 }
 
 

@@ -1,5 +1,6 @@
 import io from 'socket.io-client'
 import pos from 'dom.position'
+import qr from 'qr-image'
 
 require('normalize.css/normalize.css')
 require('styles/App.css')
@@ -14,6 +15,7 @@ export default class MainComponent extends React.Component {
 				<div className="main">
 					<div className="canvas">
 						<canvas id="myCanvas"/>
+						<div id="qr" className="qr"/>
 					</div>
 				</div>
 			</div>
@@ -26,11 +28,16 @@ export default class MainComponent extends React.Component {
 
 		const socket = io.connect(window.location.hostname + ':8080')
 		const canvas = document.getElementById('myCanvas')
+		const qrBox = document.getElementById('qr')
 		const c = canvas.getContext('2d')
 		const activeSubs = {}
 
-		canvas.width = window.innerWidth - pos(canvas).left - 10
-		canvas.height = window.innerHeight - pos(canvas).top - 10
+		const qrSvg = qr.imageSync('Do I working?', {type: 'svg'})
+		console.dir(qrSvg)
+		qrBox.innerHTML = qrSvg
+
+		const h = canvas.width = window.innerWidth - pos(canvas).left - 10
+		const w = canvas.height = window.innerHeight - pos(canvas).top - 10
 
 		c.strokeStyle = '#000000'
 		c.lineWidth = 5
