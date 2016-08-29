@@ -49,8 +49,8 @@ body {
 }
 
 .qr {
-	width: 5em;
-	height: 5em;
+	width: 100px;
+	height: 100px;
 	position: absolute;
 }
 
