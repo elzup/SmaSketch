@@ -16,6 +16,7 @@ export default class MainComponent extends React.Component {
 					<div className="canvas">
 						<canvas id="myCanvas"/>
 						<div id="qr" className="qr"/>
+						<div id="qr2" className="qr"/>
 					</div>
 				</div>
 			</div>
@@ -28,7 +29,8 @@ export default class MainComponent extends React.Component {
 
 		const socket = io.connect(window.location.hostname + ':8080')
 		const canvas = document.getElementById('myCanvas')
-		const qrBox = document.getElementById('qr')
+
+		const qrBoxs = document.getElementsByClassName('qr')
 		const c = canvas.getContext('2d')
 		const activeSubs = {}
 
@@ -61,7 +63,7 @@ export default class MainComponent extends React.Component {
 		socket.on('remove', data => {
 			delete activeSubs[data.id]
 		})
-		const qrPos = {x: 0, y: 0}
+		const qrPoses = [{x: 0, y: 0}, {x: 0, y: h / 2}]
 
 		console.log('didMount')
 
@@ -77,13 +79,15 @@ export default class MainComponent extends React.Component {
 		}
 
 		const updateQr = () => {
-			nextPos(qrPos)
-			const url = `http://${window.location.host}/sub?ox=${qrPos.x}&oy=${qrPos.y}`
-			qrBox.innerHTML = qr.imageSync(url, {type: 'svg'})
-			qrBox.style.top = qrPos.y + 'px'
-			qrBox.style.left = qrPos.x + 'px'
+			[0, 1].forEach(i => {
+				nextPos(qrPoses[i])
+				const url = `http://${window.location.host}/sub?ox=${qrPoses[i].x}&oy=${qrPoses[i].y}`
+				qrBoxs[i].innerHTML = qr.imageSync(url, {type: 'svg'})
+				qrBoxs[i].style.top = qrPoses[i].y + 'px'
+				qrBoxs[i].style.left = qrPoses[i].x + 'px'
+			})
 		}
 
-		setInterval(updateQr, 10)
+		setInterval(updateQr, 25)
 	}
 }
