@@ -37,8 +37,10 @@ export default class MainComponent extends React.Component {
 		const w = canvas.width = window.innerWidth - pos(canvas).left - 10
 		const h = canvas.height = window.innerHeight - pos(canvas).top - 10
 
-		c.strokeStyle = '#000000'
-		c.lineWidth = 5
+		const canvasStyle = {
+			'pencil': { strokeStyle: 'black', lineWidth: 5 },
+			'eraser': { strokeStyle: 'white', lineWidth: 30 }
+		}
 		c.lineJoin = 'round'
 		c.lineCap = 'round'
 
@@ -48,6 +50,7 @@ export default class MainComponent extends React.Component {
 			data.before.y += data.offset.y
 			data.after.x += data.offset.x
 			data.after.y += data.offset.y
+			Object.assign(c, canvasStyle[data.mode])
 			c.beginPath()
 			c.moveTo(data.before.x, data.before.y)
 			c.lineTo(data.after.x, data.after.y)

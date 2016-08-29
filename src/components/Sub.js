@@ -45,18 +45,18 @@ export default class SubComponent extends React.Component {
 
 		const socket = io.connect(window.location.hostname + ':8080')
 
-		let isPencilMode = true
+		let mode = 'pencil'
 
 		const pencil = document.getElementById('pencil')
 		const eraser = document.getElementById('eraser')
 		const touchPencil = () => {
-			isPencilMode = true
+			mode = 'pencil'
 			pencil.click()
 		}
 		pencil.addEventListener('mousedown', touchPencil, false)
 		pencil.addEventListener('touchstart', touchPencil, false)
 		const touchEraser = () => {
-			isPencilMode = false
+			mode = 'eraser'
 			eraser.click()
 		}
 		eraser.addEventListener('mousedown', touchEraser, false)
@@ -79,10 +79,12 @@ export default class SubComponent extends React.Component {
 			y: oy - h / 2
 		}
 
-		c.strokeStyle = '#000000'
-		c.lineWidth = 5
 		c.lineJoin = 'round'
 		c.lineCap = 'round'
+		const canvasStyle = {
+			'pencil': { strokeStyle: 'black', lineWidth: 5 },
+			'eraser': { strokeStyle: 'white', lineWidth: 30 }
+		}
 
 		const bounds = {
 			x1: offset.x,
@@ -127,7 +129,7 @@ export default class SubComponent extends React.Component {
 				const pos = getPos(event)
 				console.log('mousemove : x=' + pos.x + ', y=' + pos.y + ', drawing=' + drawing)
 				if (drawing) {
-					c.strokeStyle = '#000000'
+					Object.assign(c, canvasStyle[mode])
 					c.beginPath()
 					c.moveTo(oldPos.x, oldPos.y)
 					c.lineTo(pos.x, pos.y)
@@ -136,7 +138,8 @@ export default class SubComponent extends React.Component {
 					const data = {
 						before: oldPos,
 						after: pos,
-						offset: offset
+						offset: offset,
+						mode: mode
 					}
 					socket.emit('draw', data)
 					oldPos = pos
