@@ -51,6 +51,7 @@ body {
 .qr {
 	width: 5em;
 	height: 5em;
+	position: absolute;
 }
 
 .qr svg {

@@ -32,10 +32,6 @@ export default class MainComponent extends React.Component {
 		const c = canvas.getContext('2d')
 		const activeSubs = {}
 
-		const qrSvg = qr.imageSync('Do I working?', {type: 'svg'})
-		console.dir(qrSvg)
-		qrBox.innerHTML = qrSvg
-
 		const h = canvas.width = window.innerWidth - pos(canvas).left - 10
 		const w = canvas.height = window.innerHeight - pos(canvas).top - 10
 
@@ -65,5 +61,18 @@ export default class MainComponent extends React.Component {
 		socket.on('remove', data => {
 			delete activeSubs[data.id]
 		})
+		const qrPos = { x: 0, y: 0 }
+
+		console.log('didMount')
+		const updateQr = () => {
+			qrPos.x ++
+			qrPos.y ++
+			const url = `http://${window.location.host}/sub?ox=${qrPos.x}&oy=${qrPos.y}`
+			qrBox.innerHTML = qr.imageSync(url, {type: 'svg'})
+			console.log(qrPos)
+			qrBox.style.top = qrPos.y + 'px'
+			qrBox.style.left = qrPos.x + 'px'
+		}
+		setInterval(updateQr, 10)
 	}
 }
