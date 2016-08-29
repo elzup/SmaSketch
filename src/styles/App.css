@@ -13,6 +13,7 @@ body {
 }
 .title_con {
 	font-size: 1em;
+	margin: 0;
 }
 
 .main {
@@ -29,26 +30,13 @@ body {
 	margin-left: 10px;
 }
 
-.toolbar {
-}
-
-.toolbar ul {
-	display: flex;
-}
-
-.toolbar li {
-	width: 44px;
-	height: 44px;
-	margin: auto;
-	list-style-type: none;
-	border: 1px solid #ccc;
-	border-radius: 6px;
-	margin: 10px;
-	display: block;
+.tools > * {
+	margin-left: 10px;
 }
 
 .canvas {
 	border: 1px solid #ccc;
+	padding: 5px 10px 10px 10px;
 	position: relative;
 }
 

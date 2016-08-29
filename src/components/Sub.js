@@ -14,7 +14,7 @@ export default class SubComponent extends React.Component {
 			<div>
 				<div className="head">
 					<h1 className="title_con">Sma Sketch</h1>
-					<div>
+					<div className="tools">
 						<input type="radio" name="mode" id="pencil"/>
 						<Icon name="pencil"/>
 						<input type="radio" name="mode" id="eraser"/>
@@ -72,7 +72,7 @@ export default class SubComponent extends React.Component {
 		const {ox, oy} = parsed
 
 		const w = canvas.width = window.innerWidth - pos(canvas).left - 10
-		const h = canvas.height = window.innerHeight - pos(canvas).top - 10
+		const h = canvas.height = window.innerHeight - pos(canvas).top - 5
 
 		const offset = {
 			x: ox - w / 2,
