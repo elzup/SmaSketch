@@ -63,18 +63,30 @@ export default class MainComponent extends React.Component {
 		socket.on('remove', data => {
 			delete activeSubs[data.id]
 		})
-		const qrPoses = [{x: 0, y: 0}, {x: 0, y: h / 2}]
+		const qrPoses = [
+			{
+				x: 0,
+				y: 0,
+				vx: 4.5,
+				vy: 5
+			}, {
+				x: w / 2,
+				y: h / 2,
+				vx: -5,
+				vy: 5.5
+			}
+		]
 
 		console.log('didMount')
 
 		const nextPos = (p) => {
-			p.x += 5
-			if (p.x + 100 > w) {
-				p.x = 0
-				p.y += 50
-				if (p.y + 100 > h) {
-					p.y = 0
-				}
+			p.x += p.vx
+			p.y += p.vy
+			if (p.x + 100 > w || p.x < 0) {
+				p.vx *= -1
+			}
+			if (p.y + 100 > h || p.y < 0) {
+				p.vy *= -1
 			}
 		}
 
