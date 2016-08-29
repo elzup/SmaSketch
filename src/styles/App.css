@@ -11,14 +11,22 @@ body {
 	padding: 10px;
 	margin: 10px 0 0 10px;
 }
-
 .title_con {
-	margin: 5px 0 0 10px;
+	font-size: 1em;
 }
 
 .main {
 	padding: 10px;
 	margin: auto;
+}
+
+.head {
+	display: flex;
+	padding: 10px 10px 0 10px;
+}
+
+.head > * {
+	margin-left: 10px;
 }
 
 .toolbar {
@@ -60,6 +68,14 @@ body {
 	height: 100%;
 }
 
+.erase {
+	border: solid 1px;
+	padding: 0 1em;
+	margin-left: 10px;
+}
+
+.erase.on {
+}
 
 .clear {
 	clear: left;
