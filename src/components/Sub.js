@@ -1,12 +1,18 @@
 import React from 'react'
 import io from 'socket.io-client'
 import pos from 'dom.position'
+import queryString from 'query-string'
 
 require('normalize.css/normalize.css')
 require('styles/App.css')
 
 
 export default class SubComponent extends React.Component {
+
+	componentWillMount() {
+		const parsed = queryString.parse(location.search)
+	}
+
 	render() {
 		return (
 			<div>
@@ -23,6 +29,8 @@ export default class SubComponent extends React.Component {
 	static defaultComponent = {}
 
 	componentDidMount() {
+
+		const parsed = queryString.parse(location.search)
 
 		const stopDefault = (event) => {
 			if (event.touches[0] && event.touches[0].target.tagName == 'button') {
