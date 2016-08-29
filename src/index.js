@@ -9,8 +9,6 @@ import queryString from 'query-string'
 
 const parsed = queryString.parse(location.search)
 const isCorrectAccess = !!parsed.ox && !!parsed.oy
-console.dir(parsed)
-console.dir(isCorrectAccess)
 
 // Render the main component into the dom
 ReactDOM.render((
