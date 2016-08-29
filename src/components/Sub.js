@@ -1,12 +1,14 @@
 import React from 'react'
 import io from 'socket.io-client'
 import pos from 'dom.position'
+import queryString from 'query-string'
 
 require('normalize.css/normalize.css')
 require('styles/App.css')
 
 
 export default class SubComponent extends React.Component {
+
 	render() {
 		return (
 			<div>
@@ -31,7 +33,7 @@ export default class SubComponent extends React.Component {
 			event.preventDefault()
 		}
 
-		['touchstart', 'touchmove', 'touchend','gesturestart', 'gesturechange', 'gestureend'].forEach(func => {
+		['touchstart', 'touchmove', 'touchend', 'gesturestart', 'gesturechange', 'gestureend'].forEach(func => {
 			document.addEventListener(func, stopDefault, false)
 		})
 
@@ -42,8 +44,16 @@ export default class SubComponent extends React.Component {
 		let drawing = false
 		let oldPos
 
-		canvas.width = window.innerWidth - pos(canvas).left - 10
-		canvas.height = window.innerHeight - pos(canvas).top - 10
+		const parsed = queryString.parse(location.search)
+		const {ox, oy} = parsed
+
+		const w = canvas.width = window.innerWidth - pos(canvas).left - 10
+		const h = canvas.height = window.innerHeight - pos(canvas).top - 10
+
+		const offset = {
+			x: ox - w / 2,
+			y: oy - h / 2
+		}
 
 		c.strokeStyle = '#000000'
 		c.lineWidth = 5
@@ -51,10 +61,10 @@ export default class SubComponent extends React.Component {
 		c.lineCap = 'round'
 
 		const bounds = {
-			x1: 10,
-			y1: 10,
-			x2: 200,
-			y2: 200
+			x1: offset.x,
+			y1: offset.y,
+			x2: offset.x + w,
+			y2: offset.y + h
 		}
 
 		socket.emit('new:sub', {bounds: bounds})
@@ -98,7 +108,12 @@ export default class SubComponent extends React.Component {
 					c.lineTo(pos.x, pos.y)
 					c.stroke()
 					c.closePath()
-					socket.emit('draw', {before: oldPos, after: pos})
+					const data = {
+						before: oldPos,
+						after: pos,
+						offset: offset
+					}
+					socket.emit('draw', data)
 					oldPos = pos
 				}
 			}
@@ -114,6 +129,7 @@ export default class SubComponent extends React.Component {
 		socket.on('draw', data => {
 			console.log('on draw : ' + data)
 			c.beginPath()
+			// areaCheck
 			c.moveTo(data.before.x, data.before.y)
 			c.lineTo(data.after.x, data.after.y)
 			c.stroke()

@@ -39,6 +39,10 @@ export default class MainComponent extends React.Component {
 
 		socket.on('draw', data => {
 			console.log('on draw : ' + data)
+			data.before.x += data.offset.x
+			data.before.y += data.offset.y
+			data.after.x += data.offset.x
+			data.after.y += data.offset.y
 			c.beginPath()
 			c.moveTo(data.before.x, data.before.y)
 			c.lineTo(data.after.x, data.after.y)
