@@ -42,19 +42,6 @@ export default class SubComponent extends React.Component {
 		let mode = 'pencil'
 		const pencil = document.getElementById('pencil')
 		const eraser = document.getElementById('eraser')
-		const touchPencil = () => {
-			mode = 'pencil'
-			pencil.click()
-		}
-		pencil.addEventListener('mousedown', touchPencil, false)
-		pencil.addEventListener('touchstart', touchPencil, false)
-		const touchEraser = () => {
-			mode = 'eraser'
-			eraser.click()
-		}
-		eraser.addEventListener('mousedown', touchEraser, false)
-		eraser.addEventListener('touchstart', touchEraser, false)
-		pencil.click()
 		const canvas = document.getElementById('myCanvas')
 		const c = canvas.getContext('2d')
 		let drawing = false
@@ -74,52 +61,44 @@ export default class SubComponent extends React.Component {
 			x2: offset.x + w,
 			y2: offset.y + h
 		}
-		const getPosMouse = event => {
-			const mouseX = event.clientX - pos(canvas).left
-			const mouseY = event.clientY - pos(canvas).top
-			return {x: mouseX, y: mouseY}
-		}
-		const getPosTouch = event => {
-			const mouseX = event.touches[0].clientX - pos(canvas).left
-			const mouseY = event.touches[0].clientY - pos(canvas).top
-			return {x: mouseX, y: mouseY}
-		}
-		const touchStart = getPos => {
-			return event => {
-				drawing = true
-				oldPos = getPos(event)
-			}
-		}
-		canvas.addEventListener('mousedown', touchStart(getPosMouse), false)
-		canvas.addEventListener('touchstart', touchStart(getPosTouch), false)
-		const touchEnd = () => {
-			drawing = false
-		}
-		canvas.addEventListener('mouseup', touchEnd, false)
-		canvas.addEventListener('touchend', touchEnd, false)
-		const touchMove = getPos => {
-			return event => {
-				const pos = getPos(event)
-				if (drawing) {
-					Object.assign(c, canvasStyle[mode])
-					c.beginPath()
-					c.moveTo(oldPos.x, oldPos.y)
-					c.lineTo(pos.x, pos.y)
-					c.stroke()
-					c.closePath()
-					const data = {before: oldPos, after: pos, offset: offset, mode: mode}
-					socket.emit('draw', data)
-					oldPos = pos
-				}
-			}
-		}
-		canvas.addEventListener('mousemove', touchMove(getPosMouse), false)
-		canvas.addEventListener('touchmove', touchMove(getPosTouch), false)
-		canvas.addEventListener('mouseout', () => {
+		const getPosTouch = event => ({
+			x: event.touches[0].clientX - pos(canvas).left,
+			y: event.touches[0].clientY - pos(canvas).top
+		})
+		pencil.addEventListener('touchstart', () => {
+			mode = 'pencil'
+			pencil.click()
+		}, false)
+		eraser.addEventListener('touchstart', () => {
+			mode = 'eraser'
+			eraser.click()
+		}, false)
+		canvas.addEventListener('touchstart', event => {
+			drawing = true
+			oldPos = getPosTouch(event)
+		}, false)
+		canvas.addEventListener('touchend', () => {
 			drawing = false
 		}, false)
+		const touchMove = event => {
+			const pos = getPosTouch(event)
+			if (!drawing) {
+				return
+			}
+			Object.assign(c, canvasStyle[mode])
+			c.beginPath()
+			c.moveTo(oldPos.x, oldPos.y)
+			c.lineTo(pos.x, pos.y)
+			c.stroke()
+			c.closePath()
+			const data = {before: oldPos, after: pos, offset: offset, mode: mode}
+			socket.emit('draw', data)
+			oldPos = pos
+		}
+		canvas.addEventListener('touchmove', touchMove, false)
 		c.lineJoin = 'round'
 		c.lineCap = 'round'
+		pencil.click()
 		socket.emit('new:sub', {bounds: bounds})
 		socket.on('draw', data => {
 			c.beginPath()
