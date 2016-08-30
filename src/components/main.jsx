@@ -40,8 +40,19 @@ export default class MainComponent extends React.Component {
 		}
 
 		const canvasStyle = board.isBB ? {
-			pencil: {strokeStyle: 'white', lineWidth: 5},
-			eraser: {strokeStyle: '#002820', lineWidth: 30}
+			pencil: {
+				strokeStyle: 'white',
+				lineWidth: 5,
+				shadowBlur: 1,
+				shadowColor: 'white'
+			},
+			// Black boad eraser
+			eraser: {
+				strokeStyle: 'rgba(0, 40, 32, 0.5)',
+				lineWidth: 30,
+				shadowBlur: 20,
+				shadowColor: 'rgba(30, 70, 62, 0.2)'
+			}
 		} : {
 			pencil: {strokeStyle: 'black', lineWidth: 5},
 			eraser: {strokeStyle: 'white', lineWidth: 30}
@@ -61,11 +72,7 @@ export default class MainComponent extends React.Component {
 			}
 		}
 		const canvasConf = {lineJoin: 'round', lineCap: 'round'}
-		const bbCanvasConf = {
-			lineJoin: 'bevel',
-			lineCap: 'square',
-			shadowBlur: 1,
-			shadowColor: 'white'
+		const bbCanvasConf = { lineJoin: 'bevel', lineCap: 'square'
 		}
 		Object.assign(c, board.isBB ? bbCanvasConf : canvasConf)
 		socket.on('draw', data => {
