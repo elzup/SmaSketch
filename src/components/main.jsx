@@ -1,6 +1,7 @@
 import React from 'react'
 import io from 'socket.io-client'
 import pos from 'dom.position'
+import queryString from 'query-string'
 import qr from 'qr-image'
 
 require('normalize.css/normalize.css')
@@ -8,16 +9,20 @@ require('styles/App.css')
 
 export default class MainComponent extends React.Component {
 	render() {
+		const isBB = 'isBB' in queryString.parse(location.search)
+		if (isBB) {
+			require('styles/bb.css')
+		}
 		return (
 			<div>
-			<h1 className="title">Sma Sketch Canvas</h1>
-			<div className="main">
-				<div className="canvas">
-					<canvas id="myCanvas"/>
-					<div id="qr" className="qr"/>
-					<div id="qr2" className="qr"/>
+				<h1 className="title">Sma Sketch Canvas</h1>
+				<div className="main">
+					<div className="canvas">
+						<canvas id="myCanvas"/>
+						<div id="qr" className="qr"/>
+						<div id="qr2" className="qr"/>
+					</div>
 				</div>
-			</div>
 			</div>
 		)
 	}
@@ -28,15 +33,20 @@ export default class MainComponent extends React.Component {
 		const qrBoxs = document.getElementsByClassName('qr')
 		const c = canvas.getContext('2d')
 		const activeSubs = {}
+		const isBB = 'isBB' in queryString.parse(location.search)
 		const w = canvas.width = window.innerWidth - pos(canvas).left - 10
 		const h = canvas.height = window.innerHeight - pos(canvas).top - 10
-		const canvasStyle = {
+
+		const canvasStyle = isBB ? {
+			pencil: {strokeStyle: 'white', lineWidth: 5},
+			eraser: {strokeStyle: '#002820', lineWidth: 30}
+		} : {
 			pencil: {strokeStyle: 'black', lineWidth: 5},
 			eraser: {strokeStyle: 'white', lineWidth: 30}
 		}
 		const qrPoses = [
-			{x: 0, y: 0, vx: 2.5, vy: 6},
-			{x: w / 2, y: h / 2, vx: -6, vy: 2.5}
+			{x: 0, y: 0, vx: 1.25, vy: 3},
+			{x: w / 2, y: h / 2, vx: -3, vy: 1.25}
 		]
 		const nextPos = p => {
 			p.x += p.vx
@@ -48,8 +58,14 @@ export default class MainComponent extends React.Component {
 				p.vy *= -1
 			}
 		}
-		c.lineJoin = 'round'
-		c.lineCap = 'round'
+		const canvasConf = {lineJoin: 'round', lineCap: 'round'}
+		const bbCanvasConf = {
+			lineJoin: 'bevel',
+			lineCap: 'square',
+			shadowBlur: 1,
+			shadowColor: 'white'
+		}
+		Object.assign(c, isBB ? bbCanvasConf : canvasConf)
 		socket.on('draw', data => {
 			Object.assign(c, canvasStyle[data.mode])
 			c.beginPath()
@@ -72,6 +88,6 @@ export default class MainComponent extends React.Component {
 				qrBoxs[i].style.top = qrPoses[i].y + 'px'
 				qrBoxs[i].style.left = qrPoses[i].x + 'px'
 			})
-		}, 25)
+		}, 50)
 	}
 }
