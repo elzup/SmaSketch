@@ -46,8 +46,7 @@ export default class SubComponent extends React.Component {
 		const c = canvas.getContext('2d')
 		let drawing = false
 		let oldPos
-		const parsed = queryString.parse(location.search)
-		const {ox, oy} = parsed
+		const {ox, oy} = queryString.parse(location.search)
 		const w = canvas.width = window.innerWidth - pos(canvas).left - 10
 		const h = canvas.height = window.innerHeight - pos(canvas).top - 5
 		const offset = {x: ox - (w / 2), y: oy - (h / 2)}
