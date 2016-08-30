@@ -99,13 +99,5 @@ export default class SubComponent extends React.Component {
 		c.lineCap = 'round'
 		pencil.click()
 		socket.emit('new:sub', {bounds: bounds})
-		socket.on('draw', data => {
-			c.beginPath()
-			// areaCheck
-			c.moveTo(data.before.x, data.before.y)
-			c.lineTo(data.after.x, data.after.y)
-			c.stroke()
-			c.closePath()
-		})
 	}
 }

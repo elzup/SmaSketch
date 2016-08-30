@@ -10,12 +10,14 @@ require('styles/App.css')
 export default class MainComponent extends React.Component {
 	render() {
 		const isBB = 'isBB' in queryString.parse(location.search)
-		const style = {background: isBB ? '#002820' : 'white'}
+		if (isBB) {
+			require('styles/bb.css')
+		}
 		return (
 			<div>
 				<h1 className="title">Sma Sketch Canvas</h1>
 				<div className="main">
-					<div className="canvas" style={style}>
+					<div className="canvas">
 						<canvas id="myCanvas"/>
 						<div id="qr" className="qr"/>
 						<div id="qr2" className="qr"/>
@@ -43,8 +45,8 @@ export default class MainComponent extends React.Component {
 			eraser: {strokeStyle: 'white', lineWidth: 30}
 		}
 		const qrPoses = [
-			{x: 0, y: 0, vx: 2.5, vy: 6},
-			{x: w / 2, y: h / 2, vx: -6, vy: 2.5}
+			{x: 0, y: 0, vx: 1.25, vy: 3},
+			{x: w / 2, y: h / 2, vx: -3, vy: 1.25}
 		]
 		const nextPos = p => {
 			p.x += p.vx
@@ -58,9 +60,9 @@ export default class MainComponent extends React.Component {
 		}
 		const canvasConf = {lineJoin: 'round', lineCap: 'round'}
 		const bbCanvasConf = {
-			lineJoin: 'bavel',
+			lineJoin: 'bevel',
 			lineCap: 'square',
-			shadowBlur: 3,
+			shadowBlur: 1,
 			shadowColor: 'white'
 		}
 		Object.assign(c, isBB ? bbCanvasConf : canvasConf)
@@ -86,6 +88,6 @@ export default class MainComponent extends React.Component {
 				qrBoxs[i].style.top = qrPoses[i].y + 'px'
 				qrBoxs[i].style.left = qrPoses[i].x + 'px'
 			})
-		}, 25)
+		}, 50)
 	}
 }
