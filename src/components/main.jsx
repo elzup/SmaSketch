@@ -33,11 +33,13 @@ export default class MainComponent extends React.Component {
 		const qrBoxs = document.getElementsByClassName('qr')
 		const c = canvas.getContext('2d')
 		const activeSubs = {}
-		const isBB = 'isBB' in queryString.parse(location.search)
-		const w = canvas.width = window.innerWidth - pos(canvas).left - 10
-		const h = canvas.height = window.innerHeight - pos(canvas).top - 10
+		const board = {
+			isBB: 'isBB' in queryString.parse(location.search),
+			w: canvas.width = window.innerWidth - pos(canvas).left - 10,
+			h: canvas.height = window.innerHeight - pos(canvas).top - 10
+		}
 
-		const canvasStyle = isBB ? {
+		const canvasStyle = board.isBB ? {
 			pencil: {strokeStyle: 'white', lineWidth: 5},
 			eraser: {strokeStyle: '#002820', lineWidth: 30}
 		} : {
@@ -46,15 +48,15 @@ export default class MainComponent extends React.Component {
 		}
 		const qrPoses = [
 			{x: 0, y: 0, vx: 1.25, vy: 3},
-			{x: w / 2, y: h / 2, vx: -3, vy: 1.25}
+			{x: board.w / 2, y: board.h / 2, vx: -3, vy: 1.25}
 		]
 		const nextPos = p => {
 			p.x += p.vx
 			p.y += p.vy
-			if (p.x + 100 > w || p.x < 0) {
+			if (p.x + 100 > board.w || p.x < 0) {
 				p.vx *= -1
 			}
-			if (p.y + 100 > h || p.y < 0) {
+			if (p.y + 100 > board.h || p.y < 0) {
 				p.vy *= -1
 			}
 		}
@@ -65,7 +67,7 @@ export default class MainComponent extends React.Component {
 			shadowBlur: 1,
 			shadowColor: 'white'
 		}
-		Object.assign(c, isBB ? bbCanvasConf : canvasConf)
+		Object.assign(c, board.isBB ? bbCanvasConf : canvasConf)
 		socket.on('draw', data => {
 			Object.assign(c, canvasStyle[data.mode])
 			c.beginPath()
@@ -76,6 +78,11 @@ export default class MainComponent extends React.Component {
 		})
 		socket.on('new:sub', data => {
 			activeSubs[data.id] = data
+			const syncData = {
+				board: board,
+				id: data.id
+			}
+			socket.emit('new:sub:sync', syncData)
 		})
 		socket.on('remove', data => {
 			delete activeSubs[data.id]

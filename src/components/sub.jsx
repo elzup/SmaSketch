@@ -94,6 +94,13 @@ export default class SubComponent extends React.Component {
 			socket.emit('draw', data)
 			oldPos = pos
 		}
+		socket.on('new:sub:sync', (data) => {
+			console.log(data)
+			const { board } = data
+			// draw line frame
+			c.rect(0 - offset.x, 0 - offset.y, board.w, board.h)
+			c.stroke()
+		})
 		canvas.addEventListener('touchmove', touchMove, false)
 		c.lineJoin = 'round'
 		c.lineCap = 'round'
