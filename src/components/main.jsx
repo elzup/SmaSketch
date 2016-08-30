@@ -35,8 +35,8 @@ export default class MainComponent extends React.Component {
 			eraser: {strokeStyle: 'white', lineWidth: 30}
 		}
 		const qrPoses = [
-			{x: 0, y: 0, vx: 4.5, vy: 5},
-			{x: w / 2, y: h / 2, vx: -5, vy: 5.5}
+			{x: 0, y: 0, vx: 2.5, vy: 6},
+			{x: w / 2, y: h / 2, vx: -6, vy: 2.5}
 		]
 		const nextPos = p => {
 			p.x += p.vx

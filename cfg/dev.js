@@ -38,7 +38,7 @@ config.module.loaders.push({
 
 config.module.loaders.push({
 	test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-	loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+	loader: 'url-loader?mimetype=application/font-woff'
 })
 
 config.module.loaders.push({
