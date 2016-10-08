@@ -28,7 +28,7 @@ export default class MainComponent extends React.Component {
 	}
 
 	componentDidMount() {
-		const socket = io.connect(window.location.hostname + ':8080')
+		const socket = io.connect(window.location.hostname)
 		const canvas = document.getElementById('myCanvas')
 		const qrBoxs = document.getElementsByClassName('qr')
 		const c = canvas.getContext('2d')

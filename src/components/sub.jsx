@@ -30,7 +30,7 @@ export default class SubComponent extends React.Component {
 	}
 
 	componentDidMount() {
-		const socket = io.connect(window.location.hostname + ':8080')
+		const socket = io.connect(window.location.hostname)
 		const stopDefault = event => {
 			if (!['input', 'button'].includes(event.touches[0] && event.touches[0].target.tagName.toLowerCase())) {
 				event.preventDefault()
