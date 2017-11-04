@@ -1,7 +1,6 @@
 import React from 'react'
 import io from 'socket.io-client'
 import pos from 'dom.position'
-import queryString from 'query-string'
 import qr from 'qr-image'
 
 require('../../styles/App.css')
