@@ -4,14 +4,13 @@ import pos from 'dom.position'
 import queryString from 'query-string'
 import qr from 'qr-image'
 
-require('normalize.css/normalize.css')
-require('styles/App.css')
+require('../../styles/App.css')
 
 export default class MainComponent extends React.Component {
 	render() {
-		const isBB = 'isBB' in queryString.parse(location.search)
+		const isBB = true
 		if (isBB) {
-			require('styles/bb.css')
+			require('../../styles/bb.css')
 		}
 		return (
 			<div>
@@ -34,7 +33,7 @@ export default class MainComponent extends React.Component {
 		const c = canvas.getContext('2d')
 		const activeSubs = {}
 		const board = {
-			isBB: 'isBB' in queryString.parse(location.search),
+			isBB: true,
 			w: (canvas.width = window.innerWidth - pos(canvas).left - 10),
 			h: (canvas.height = window.innerHeight - pos(canvas).top - 10),
 		}

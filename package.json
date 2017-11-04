@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.1",
   "description": "Smart Sketch board for web",
-  "main": "",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -11,9 +10,6 @@
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
   },
-  "repository": "",
-  "keywords": [],
-  "author": "Your name here",
   "devDependencies": {
     "babel-eslint": "^8.0.1",
     "dom.position": "0.0.0",
@@ -37,7 +33,7 @@
   "dependencies": {
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
     "styled-components": "^2.2.3"
   }

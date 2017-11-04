@@ -1,5 +1,5 @@
 // @flow
-import 'moment/locale/ja'
+
 import { injectGlobal } from 'styled-components'
 
 injectGlobal`
