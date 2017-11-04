@@ -13,10 +13,12 @@ import './init'
 const MainRoot = props => {
 	const params = queryString.parse(props.location.search)
 	const isSub = 'sub' in params
+	const room = params.room || 'main'
 	if (isSub) {
-		return <SubComponent ox={ox} oy={oy} />
+		const { ox, oy } = params
+		return <SubComponent ox={ox} oy={oy} room={room} />
 	} else {
-		return <MainComponent />
+		return <MainComponent room={room} />
 	}
 }
 

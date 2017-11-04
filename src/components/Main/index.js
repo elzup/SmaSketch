@@ -2,6 +2,7 @@ import React from 'react'
 import io from 'socket.io-client'
 import pos from 'dom.position'
 import qr from 'qr-image'
+const url = 'https://gwss.elzup.com/base'
 
 require('../../styles/App.css')
 
@@ -26,7 +27,14 @@ export default class MainComponent extends React.Component {
 	}
 
 	componentDidMount() {
-		const socket = io.connect(window.location.hostname)
+		const socket = io.connect(url)
+		socket.on('connect', () => {
+			this.init(socket)
+		})
+	}
+
+	async init(socket) {
+		socket.emit('join', { room: this.props.room, profile: 'a' })
 		const canvas = document.getElementById('myCanvas')
 		const qrBoxs = document.getElementsByClassName('qr')
 		const c = canvas.getContext('2d')
@@ -85,16 +93,20 @@ export default class MainComponent extends React.Component {
 			c.stroke()
 			c.closePath()
 		})
-		socket.on('new:sub', data => {
-			activeSubs[data.id] = data
-			const syncData = {
-				board: board,
-				id: data.id,
+
+		socket.on('msg', data => {
+			switch (data.event) {
+				case 'new:sub':
+					activeSubs[data.id] = data
+					const syncData = {
+						board: board,
+						id: data.id,
+					}
+					socket.emit('new:sub:sync', syncData)
+				case 'disconnect':
+					delete activeSubs[data.id]
+				default:
 			}
-			socket.emit('new:sub:sync', syncData)
-		})
-		socket.on('remove', data => {
-			delete activeSubs[data.id]
 		})
 		setInterval(() => {
 			;[0, 1].forEach(i => {

@@ -5,6 +5,8 @@ import pos from 'dom.position'
 import queryString from 'query-string'
 import { Icon } from 'react-fa'
 
+const url = 'https://gwss.elzup.com/base'
+
 require('../../styles/App.css')
 
 export default class SubComponent extends React.Component {
@@ -30,7 +32,14 @@ export default class SubComponent extends React.Component {
 	}
 
 	componentDidMount() {
-		const socket = io.connect(window.location.hostname)
+		const socket = io.connect(url)
+		socket.on('connect', () => {
+			this.init(socket)
+		})
+	}
+
+	async init(socket) {
+		socket.emit('join', { room: this.props.room, profile: 'a' })
 		const stopDefault = event => {
 			if (
 				!['input', 'button'].includes(
@@ -121,13 +130,19 @@ export default class SubComponent extends React.Component {
 			socket.emit('draw', data)
 			oldPos = pos
 		}
-		socket.on('new:sub:sync', data => {
-			console.log(data)
-			const { board } = data
-			// draw line frame
-			c.rect(0 - offset.x, 0 - offset.y, board.w, board.h)
-			c.stroke()
+
+		socket.on('msg', data => {
+			switch (data.event) {
+				case 'new:sub:sync':
+					console.log(data)
+					const { board } = data
+					// draw line frame
+					c.rect(0 - offset.x, 0 - offset.y, board.w, board.h)
+					c.stroke()
+				default:
+			}
 		})
+		socket.on('', data => {})
 		canvas.addEventListener('touchmove', touchMove, false)
 		c.lineJoin = 'round'
 		c.lineCap = 'round'
