@@ -18,9 +18,9 @@ export default class MainComponent extends React.Component {
 				<h1 className="title">Sma Sketch Canvas</h1>
 				<div className="main">
 					<div className="canvas">
-						<canvas id="myCanvas"/>
-						<div id="qr" className="qr"/>
-						<div id="qr2" className="qr"/>
+						<canvas id="myCanvas" />
+						<div id="qr" className="qr" />
+						<div id="qr2" className="qr" />
 					</div>
 				</div>
 			</div>
@@ -35,31 +35,33 @@ export default class MainComponent extends React.Component {
 		const activeSubs = {}
 		const board = {
 			isBB: 'isBB' in queryString.parse(location.search),
-			w: canvas.width = window.innerWidth - pos(canvas).left - 10,
-			h: canvas.height = window.innerHeight - pos(canvas).top - 10
+			w: (canvas.width = window.innerWidth - pos(canvas).left - 10),
+			h: (canvas.height = window.innerHeight - pos(canvas).top - 10),
 		}
 
-		const canvasStyle = board.isBB ? {
-			pencil: {
-				strokeStyle: 'white',
-				lineWidth: 5,
-				shadowBlur: 1,
-				shadowColor: 'white'
-			},
-			// Black boad eraser
-			eraser: {
-				strokeStyle: 'rgba(0, 40, 32, 0.5)',
-				lineWidth: 30,
-				shadowBlur: 20,
-				shadowColor: 'rgba(30, 70, 62, 0.2)'
-			}
-		} : {
-			pencil: {strokeStyle: 'black', lineWidth: 5},
-			eraser: {strokeStyle: 'white', lineWidth: 30}
-		}
+		const canvasStyle = board.isBB
+			? {
+					pencil: {
+						strokeStyle: 'white',
+						lineWidth: 5,
+						shadowBlur: 1,
+						shadowColor: 'white',
+					},
+					// Black boad eraser
+					eraser: {
+						strokeStyle: 'rgba(0, 40, 32, 0.5)',
+						lineWidth: 30,
+						shadowBlur: 20,
+						shadowColor: 'rgba(30, 70, 62, 0.2)',
+					},
+				}
+			: {
+					pencil: { strokeStyle: 'black', lineWidth: 5 },
+					eraser: { strokeStyle: 'white', lineWidth: 30 },
+				}
 		const qrPoses = [
-			{x: 0, y: 0, vx: 1.25, vy: 3},
-			{x: board.w / 2, y: board.h / 2, vx: -3, vy: 1.25}
+			{ x: 0, y: 0, vx: 1.25, vy: 3 },
+			{ x: board.w / 2, y: board.h / 2, vx: -3, vy: 1.25 },
 		]
 		const nextPos = p => {
 			p.x += p.vx
@@ -71,8 +73,10 @@ export default class MainComponent extends React.Component {
 				p.vy *= -1
 			}
 		}
-		const canvasConf = {lineJoin: 'round', lineCap: 'round'}
-		const bbCanvasConf = { lineJoin: 'bevel', lineCap: 'square'
+		const canvasConf = { lineJoin: 'round', lineCap: 'round' }
+		const bbCanvasConf = {
+			lineJoin: 'bevel',
+			lineCap: 'square',
 		}
 		Object.assign(c, board.isBB ? bbCanvasConf : canvasConf)
 		socket.on('draw', data => {
@@ -87,7 +91,7 @@ export default class MainComponent extends React.Component {
 			activeSubs[data.id] = data
 			const syncData = {
 				board: board,
-				id: data.id
+				id: data.id,
 			}
 			socket.emit('new:sub:sync', syncData)
 		})
@@ -95,10 +99,11 @@ export default class MainComponent extends React.Component {
 			delete activeSubs[data.id]
 		})
 		setInterval(() => {
-			[0, 1].forEach(i => {
+			;[0, 1].forEach(i => {
 				nextPos(qrPoses[i])
-				const url = `http://${window.location.host}/sub?ox=${qrPoses[i].x}&oy=${qrPoses[i].y}`
-				qrBoxs[i].innerHTML = qr.imageSync(url, {type: 'svg'})
+				const url = `http://${window.location.host}/sub?ox=${qrPoses[i]
+					.x}&oy=${qrPoses[i].y}`
+				qrBoxs[i].innerHTML = qr.imageSync(url, { type: 'svg' })
 				qrBoxs[i].style.top = qrPoses[i].y + 'px'
 				qrBoxs[i].style.left = qrPoses[i].x + 'px'
 			})
