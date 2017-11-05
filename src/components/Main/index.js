@@ -15,9 +15,9 @@ import type {
 	CanvasState,
 } from '../../types'
 
-const url = 'https://gwss.elzup.com/base'
+import { Title, Main, CanvasWrap, QR } from '../'
 
-require('../../styles/App.css')
+const url = 'https://gwss.elzup.com/base'
 
 type Props = {
 	room: string,
@@ -26,19 +26,16 @@ type Props = {
 export default class MainComponent extends React.Component<Props> {
 	render() {
 		const isBB = true
-		if (isBB) {
-			require('../../styles/bb.css')
-		}
 		return (
 			<div>
-				<h1 className="title">Sma Sketch Canvas</h1>
-				<div className="main">
-					<div className="canvas">
+				<Title>Sma Sketch Canvas</Title>
+				<Main>
+					<CanvasWrap>
 						<canvas id="myCanvas" />
-						<div id="qr" className="qr" />
-						<div id="qr2" className="qr" />
-					</div>
-				</div>
+						<QR id="qr" className="qr" />
+						<QR id="qr2" className="qr" />
+					</CanvasWrap>
+				</Main>
 			</div>
 		)
 	}
