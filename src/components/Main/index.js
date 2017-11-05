@@ -1,12 +1,29 @@
+// @flow
 import React from 'react'
 import io from 'socket.io-client'
 import pos from 'dom.position'
 import qr from 'qr-image'
+
+import type {
+	Pos,
+	Draw,
+	Message,
+	Board,
+	JoinMessage,
+	DrawMessage,
+	SyncMessage,
+	CanvasState,
+} from '../../types'
+
 const url = 'https://gwss.elzup.com/base'
 
 require('../../styles/App.css')
 
-export default class MainComponent extends React.Component {
+type Props = {
+	room: string,
+}
+
+export default class MainComponent extends React.Component<Props> {
 	render() {
 		const isBB = true
 		if (isBB) {
@@ -33,13 +50,19 @@ export default class MainComponent extends React.Component {
 		})
 	}
 
-	async init(socket) {
-		socket.emit('join', { room: this.props.room, profile: 'a' })
-		const canvas = document.getElementById('myCanvas')
+	init(socket: any) {
+		const { room } = this.props
+		if (document === null) {
+			console.error('Not found dom.')
+			return
+		}
+		const canvas: any = document.getElementById('myCanvas')
 		const qrBoxs = document.getElementsByClassName('qr')
+		const msg: JoinMessage = { event: 'join', room, profile: 'a' }
+		socket.emit('join', msg)
 		const c = canvas.getContext('2d')
 		const activeSubs = {}
-		const board = {
+		const board: Board = {
 			isBB: true,
 			w: (canvas.width = window.innerWidth - pos(canvas).left - 10),
 			h: (canvas.height = window.innerHeight - pos(canvas).top - 10),
@@ -85,26 +108,32 @@ export default class MainComponent extends React.Component {
 			lineCap: 'square',
 		}
 		Object.assign(c, board.isBB ? bbCanvasConf : canvasConf)
-		socket.on('draw', data => {
-			Object.assign(c, canvasStyle[data.mode])
-			c.beginPath()
-			c.moveTo(data.before.x + data.offset.x, data.before.y + data.offset.y)
-			c.lineTo(data.after.x + data.offset.x, data.after.y + data.offset.y)
-			c.stroke()
-			c.closePath()
-		})
-
-		socket.on('msg', data => {
-			switch (data.event) {
-				case 'new:sub':
-					activeSubs[data.id] = data
-					const syncData = {
-						board: board,
-						id: data.id,
+		socket.on('msg', (msg: Message) => {
+			console.log(msg)
+			switch (msg.event) {
+				case 'draw':
+					const { data } = msg
+					Object.assign(c, canvasStyle[data.mode])
+					c.beginPath()
+					c.moveTo(data.before.x + data.offset.x, data.before.y + data.offset.y)
+					c.lineTo(data.after.x + data.offset.x, data.after.y + data.offset.y)
+					c.stroke()
+					c.closePath()
+					break
+				case 'join':
+					if (msg.event === 'join' && msg.id) {
+						// HACK: Why no type ...
+						activeSubs[msg.id] = msg.profile
+						console.log(activeSubs)
+						const rep: SyncMessage = {
+							event: 'sync',
+							data: { board },
+						}
+						socket.emit('msg', rep)
 					}
-					socket.emit('new:sub:sync', syncData)
+					break
 				case 'disconnect':
-					delete activeSubs[data.id]
+					delete activeSubs[msg.id]
 				default:
 			}
 		})
