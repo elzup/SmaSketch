@@ -14,7 +14,3 @@ npm start
 ### smasketchServer(input, [options])
 
 ## License
-
-MIT 諱ｯ [elzup](http://elzup.com)
-
-
