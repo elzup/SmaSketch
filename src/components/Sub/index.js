@@ -14,9 +14,9 @@ import type {
 	CanvasState,
 } from '../../types'
 
-const url = 'https://gwss.elzup.com/base'
+import { TitleCon, Head, Tools, CanvasCon, Main, CanvasWrap, QR } from '../'
 
-require('../../styles/App.css')
+const url = 'https://gwss.elzup.com/base'
 
 type Props = {
 	room: string,
@@ -28,20 +28,20 @@ export default class SubComponent extends React.Component<Props, {}> {
 	render() {
 		return (
 			<div>
-				<div className="head">
-					<h1 className="title_con">Sma Sketch</h1>
-					<div className="tools">
+				<Head>
+					<TitleCon>Sma Sketch</TitleCon>
+					<Tools>
 						<input type="radio" name="mode" id="pencil" />
 						<Icon name="pencil" />
 						<input type="radio" name="mode" id="eraser" />
 						<Icon name="eraser" />
-					</div>
-				</div>
-				<div className="main">
-					<div className="canvas">
+					</Tools>
+				</Head>
+				<Main>
+					<CanvasCon>
 						<canvas id="myCanvas" />
-					</div>
-				</div>
+					</CanvasCon>
+				</Main>
 			</div>
 		)
 	}

@@ -17,6 +17,12 @@ export const CanvasWrap = styled.div`
 	background: #002820;
 `
 
+export const CanvasCon = styled.div`
+	border: 5px solid #ccc;
+	padding: 5px 10px 10px 10px;
+	position: relative;
+`
+
 export const QR = styled.div`
 	width: 100px;
 	height: 100px;
@@ -36,8 +42,6 @@ export const Head = styled.div`
 	padding: 10px 10px 0 10px;
 `
 
-export const CanvasCon = styled.div`
-	border: 5px solid #ccc;
-	padding: 5px 10px 10px 10px;
-	position: relative;
+export const Tools = styled.div`
+	display: flex;
 `
