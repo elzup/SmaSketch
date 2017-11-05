@@ -2,19 +2,10 @@
 import React from 'react'
 import io from 'socket.io-client'
 import pos from 'dom.position'
-import queryString from 'query-string'
 import { Icon } from 'react-fa'
-import type {
-	Pos,
-	Draw,
-	Message,
-	JoinMessage,
-	DrawMessage,
-	SyncMessage,
-	CanvasState,
-} from '../../types'
+import type { Draw, JoinMessage, DrawMessage, CanvasState } from '../../types'
 
-import { TitleCon, Head, Tools, CanvasCon, Main, CanvasWrap, QR } from '../'
+import { TitleCon, Head, Tools, CanvasCon, Main } from '../'
 
 const url = 'https://gwss.elzup.com/base'
 
@@ -55,7 +46,6 @@ export default class SubComponent extends React.Component<Props, {}> {
 
 	init(socket: any) {
 		const { room, ox, oy } = this.props
-		const {} = this.props
 		if (document === null) {
 			console.error('Not found dom.')
 			return
@@ -179,7 +169,9 @@ export default class SubComponent extends React.Component<Props, {}> {
 					// draw line frame
 					c.rect(0 - offset.x, 0 - offset.y, board.w, board.h)
 					c.stroke()
+					break
 				default:
+					break
 			}
 		})
 		canvas.addEventListener('touchmove', touchMove, false)

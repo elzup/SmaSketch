@@ -4,16 +4,7 @@ import io from 'socket.io-client'
 import pos from 'dom.position'
 import qr from 'qr-image'
 
-import type {
-	Pos,
-	Draw,
-	Message,
-	Board,
-	JoinMessage,
-	DrawMessage,
-	SyncMessage,
-	CanvasState,
-} from '../../types'
+import type { Message, Board, JoinMessage, SyncMessage } from '../../types'
 
 import { Title, Main, CanvasWrap, QR } from '../'
 
@@ -25,7 +16,6 @@ type Props = {
 
 export default class MainComponent extends React.Component<Props> {
 	render() {
-		const isBB = true
 		return (
 			<div>
 				<Title>Sma Sketch Canvas</Title>
@@ -131,7 +121,9 @@ export default class MainComponent extends React.Component<Props> {
 					break
 				case 'disconnect':
 					delete activeSubs[msg.id]
+					break
 				default:
+					break
 			}
 		})
 		setInterval(() => {

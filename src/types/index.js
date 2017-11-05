@@ -14,12 +14,6 @@ export type Bound = {
 	y2: number,
 }
 
-export type CanvasState = {
-	mode: DrawMode,
-	drawing: boolean,
-	oldPos: Pos,
-}
-
 export type Board = {
 	isBB: boolean,
 	w: number,
@@ -58,6 +52,12 @@ export type SyncMessage = {
 export type DisconnectMessage = {
 	+id: string,
 	+event: 'disconnect',
+}
+
+export type CanvasState = {
+	mode: DrawMode,
+	drawing: boolean,
+	oldPos: Pos,
 }
 
 export type Message =
