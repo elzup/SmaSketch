@@ -2,10 +2,11 @@
 import React from 'react'
 import io from 'socket.io-client'
 import pos from 'dom.position'
-import { Icon } from 'react-fa'
+import FontAwesome from 'react-fontawesome'
+
 import type { Draw, JoinMessage, DrawMessage, CanvasState } from '../../types'
 
-import { TitleCon, Head, Tools, CanvasCon, Main } from '../'
+import { TitleCon, Head, Tools, CanvasCon, Main, Button } from '../'
 
 const url = 'https://gwss.elzup.com/base'
 
@@ -15,24 +16,47 @@ type Props = {
 	oy: number,
 }
 
-export default class SubComponent extends React.Component<Props, {}> {
+type State = {}
+
+// HACKME: canvas and react matching so boad
+//         we use static property for stop rerender
+
+export default class SubComponent extends React.Component<Props, State> {
+	static cstate: CanvasState = {
+		mode: 'pencil',
+		drawing: false,
+		oldPos: { x: 0, y: 0 },
+	}
+
 	render() {
 		return (
 			<div>
 				<Head>
 					<TitleCon>Sma Sketch</TitleCon>
-					<Tools>
-						<input type="radio" name="mode" id="pencil" />
-						<Icon name="pencil" />
-						<input type="radio" name="mode" id="eraser" />
-						<Icon name="eraser" />
-					</Tools>
 				</Head>
 				<Main>
 					<CanvasCon>
 						<canvas id="myCanvas" />
 					</CanvasCon>
 				</Main>
+				<Tools>
+					<Button
+						active={SubComponent.cstate.mode === 'pencil'}
+						onClick={() => {
+							SubComponent.cstate.mode = 'pencil'
+						}}
+					>
+						<FontAwesome name="pencil" size="2x" />
+					</Button>
+					<Button
+						active={SubComponent.cstate.mode === 'pencil'}
+						onClick={() => {
+							SubComponent.cstate.mode = 'eraser'
+						}}
+					>
+						<FontAwesome name="eraser" size="2x" />
+					</Button>
+				</Tools>
 			</div>
 		)
 	}
@@ -45,18 +69,13 @@ export default class SubComponent extends React.Component<Props, {}> {
 	}
 
 	init(socket: any) {
+		const { cstate } = SubComponent
 		const { room, ox, oy } = this.props
 		if (document === null) {
 			console.error('Not found dom.')
 			return
 		}
-		const pencil = document.getElementById('pencil')
-		const eraser = document.getElementById('eraser')
 		const canvas: any = document.getElementById('myCanvas')
-		if (pencil === null || eraser === null || canvas === null) {
-			console.error('Not found dom.')
-			return
-		}
 		const stopDefault = (event: any) => {
 			if (
 				!['input', 'button'].includes(
@@ -78,13 +97,9 @@ export default class SubComponent extends React.Component<Props, {}> {
 			document.addEventListener(func, stopDefault, false)
 		})
 		const c = canvas.getContext('2d')
-		const state: CanvasState = {
-			mode: 'pencil',
-			drawing: false,
-			oldPos: { x: 0, y: 0 },
-		}
+
 		const w = (canvas.width = window.innerWidth - pos(canvas).left - 10)
-		const h = (canvas.height = window.innerHeight - pos(canvas).top - 5)
+		const h = (canvas.height = window.innerHeight - pos(canvas).top - 30)
 		const offset = { x: ox - w / 2, y: oy - h / 2 }
 		const canvasStyle = {
 			pencil: { strokeStyle: 'black', lineWidth: 5 },
@@ -107,57 +122,41 @@ export default class SubComponent extends React.Component<Props, {}> {
 			x: event.touches[0].clientX - pos(canvas).left,
 			y: event.touches[0].clientY - pos(canvas).top,
 		})
-		pencil.addEventListener(
-			'touchstart',
-			() => {
-				state.mode = 'pencil'
-				pencil.click()
-			},
-			false,
-		)
-		eraser.addEventListener(
-			'touchstart',
-			() => {
-				state.mode = 'eraser'
-				eraser.click()
-			},
-			false,
-		)
 		canvas.addEventListener(
 			'touchstart',
 			event => {
-				state.drawing = true
-				state.oldPos = getPosTouch(event)
+				cstate.drawing = true
+				cstate.oldPos = getPosTouch(event)
 			},
 			false,
 		)
 		canvas.addEventListener(
 			'touchend',
 			() => {
-				state.drawing = false
+				cstate.drawing = false
 			},
 			false,
 		)
 		const touchMove = event => {
 			const pos = getPosTouch(event)
-			if (!state.drawing) {
+			if (!cstate.drawing) {
 				return
 			}
-			Object.assign(c, canvasStyle[state.mode])
+			Object.assign(c, canvasStyle[cstate.mode])
 			c.beginPath()
-			c.moveTo(state.oldPos.x, state.oldPos.y)
+			c.moveTo(cstate.oldPos.x, cstate.oldPos.y)
 			c.lineTo(pos.x, pos.y)
 			c.stroke()
 			c.closePath()
 			const data: Draw = {
-				before: state.oldPos,
+				before: cstate.oldPos,
 				after: pos,
 				offset: offset,
-				mode: state.mode,
+				mode: cstate.mode,
 			}
 			const msg: DrawMessage = { event: 'draw', data }
 			socket.emit('msg', msg)
-			state.oldPos = pos
+			cstate.oldPos = pos
 		}
 
 		socket.on('msg', msg => {
@@ -177,6 +176,5 @@ export default class SubComponent extends React.Component<Props, {}> {
 		canvas.addEventListener('touchmove', touchMove, false)
 		c.lineJoin = 'round'
 		c.lineCap = 'round'
-		pencil.click()
 	}
 }

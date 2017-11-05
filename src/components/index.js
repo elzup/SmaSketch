@@ -44,4 +44,14 @@ export const Head = styled.div`
 
 export const Tools = styled.div`
 	display: flex;
+	height: 50px;
+	width: 100%;
+`
+
+export const Button = styled.button`
+	height: 100%;
+	width: 50%;
+	background: ${p => (p.active ? 'gray' : '#aaa')};
+	border: none;
+	border-radius: 5px;
 `
