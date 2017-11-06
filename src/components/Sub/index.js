@@ -104,7 +104,7 @@ export default class SubComponent extends React.Component<Props, State> {
 			'gestureend',
 		]
 		events.forEach((func: string) => {
-			// document.addEventListener(func, stopDefault, false)
+			document.addEventListener(func, stopDefault, false)
 		})
 		const c = canvas.getContext('2d')
 
