@@ -58,6 +58,7 @@ export type CanvasState = {
 	mode: DrawMode,
 	drawing: boolean,
 	oldPos: Pos,
+	baord: Board | null,
 }
 
 export type Message =

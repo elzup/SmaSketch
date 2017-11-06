@@ -30,6 +30,7 @@ export default class SubComponent extends React.Component<Props, State> {
 		}
 		this.cstate = {
 			mode: 'pencil',
+			board: null,
 			drawing: false,
 			oldPos: { x: 0, y: 0 },
 		}
@@ -158,6 +159,11 @@ export default class SubComponent extends React.Component<Props, State> {
 			c.lineTo(pos.x, pos.y)
 			c.stroke()
 			c.closePath()
+			Object.assign(c, canvasStyle.pencil)
+			c.beginPath()
+			c.rect(0 - offset.x, 0 - offset.y, cstate.board.w, cstate.board.h)
+			c.stroke()
+			c.closePath()
 			const data: Draw = {
 				before: cstate.oldPos,
 				after: pos,
@@ -174,9 +180,10 @@ export default class SubComponent extends React.Component<Props, State> {
 				case 'sync':
 					const { data } = msg
 					console.log(data)
-					const { board } = data
+					cstate.board = data.board
 					// draw line frame
-					c.rect(0 - offset.x, 0 - offset.y, board.w, board.h)
+					Object.assign(c, canvasStyle.pencil)
+					c.rect(0 - offset.x, 0 - offset.y, cstate.board.w, cstate.board.h)
 					c.stroke()
 					break
 				default:
