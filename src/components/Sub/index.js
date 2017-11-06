@@ -43,6 +43,7 @@ export default class SubComponent extends React.Component<Props, State> {
 				</CanvasCon>
 				<Tools>
 					<Button
+						id="pencil-btn"
 						active={this.state.mode === 'pencil'}
 						onClick={() => {
 							this.setState({ mode: 'pencil' })
@@ -52,6 +53,7 @@ export default class SubComponent extends React.Component<Props, State> {
 						<FontAwesome name="pencil" size="2x" />
 					</Button>
 					<Button
+						id="eraser-btn"
 						active={this.state.mode === 'eraser'}
 						onClick={() => {
 							this.setState({ mode: 'eraser' })
@@ -86,6 +88,12 @@ export default class SubComponent extends React.Component<Props, State> {
 			return
 		}
 		const canvas: any = document.getElementById('myCanvas')
+		const pencil: any = document.getElementById('pencil-btn')
+		const eraser: any = document.getElementById('eraser-btn')
+		if (pencil === null || eraser === null) {
+			console.error('Not found pencil, eraser.')
+			return
+		}
 		const stopDefault = (event: any) => {
 			if (
 				!['input', 'button'].includes(
@@ -104,7 +112,7 @@ export default class SubComponent extends React.Component<Props, State> {
 			'gestureend',
 		]
 		events.forEach((func: string) => {
-			document.addEventListener(func, stopDefault, false)
+			canvas.addEventListener(func, stopDefault, false)
 		})
 		const c = canvas.getContext('2d')
 
