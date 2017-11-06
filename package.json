@@ -16,7 +16,6 @@
     "eslint": "3.19.0",
     "eslint-config-react-app": "^2.0.1",
     "eslint-loader": "1.8.0",
-    "eslint-plugin-class-property": "^1.0.6",
     "eslint-plugin-flowtype": "2.34.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "5.0.3",
@@ -27,6 +26,7 @@
     "qr-image": "^3.1.0",
     "query-string": "^5.0.1",
     "react-addons-test-utils": "^15.3.1",
+    "react-scripts": "^1.0.17",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4"
   },
@@ -35,7 +35,6 @@
     "react-dom": "^16.0.0",
     "react-fontawesome": "^1.6.1",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.17",
     "styled-components": "^2.2.3"
   }
 }

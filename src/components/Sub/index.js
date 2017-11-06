@@ -6,7 +6,8 @@ import FontAwesome from 'react-fontawesome'
 
 import type { Draw, JoinMessage, DrawMessage, CanvasState } from '../../types'
 
-import { TitleCon, Head, Tools, CanvasCon, Main, Button } from '../'
+import { Tools, CanvasCon, Button } from '../'
+import { injectGlobal } from 'styled-components'
 
 const url = 'https://gwss.elzup.com/base'
 
@@ -16,42 +17,45 @@ type Props = {
 	oy: number,
 }
 
-type State = {}
+type State = { mode: string }
 
 // HACKME: canvas and react matching so boad
 //         we use static property for stop rerender
 
 export default class SubComponent extends React.Component<Props, State> {
-	static cstate: CanvasState = {
-		mode: 'pencil',
-		drawing: false,
-		oldPos: { x: 0, y: 0 },
+	constructor(props: Props) {
+		super(props)
+		this.state = {
+			mode: 'pencil',
+		}
+		this.cstate = {
+			mode: 'pencil',
+			drawing: false,
+			oldPos: { x: 0, y: 0 },
+		}
 	}
 
 	render() {
 		return (
 			<div>
-				<Head>
-					<TitleCon>Sma Sketch</TitleCon>
-				</Head>
-				<Main>
-					<CanvasCon>
-						<canvas id="myCanvas" />
-					</CanvasCon>
-				</Main>
+				<CanvasCon>
+					<canvas id="myCanvas" />
+				</CanvasCon>
 				<Tools>
 					<Button
-						active={SubComponent.cstate.mode === 'pencil'}
+						active={this.state.mode === 'pencil'}
 						onClick={() => {
-							SubComponent.cstate.mode = 'pencil'
+							this.setState({ mode: 'pencil' })
+							this.cstate.mode = 'pencil'
 						}}
 					>
 						<FontAwesome name="pencil" size="2x" />
 					</Button>
 					<Button
-						active={SubComponent.cstate.mode === 'pencil'}
+						active={this.state.mode === 'eraser'}
 						onClick={() => {
-							SubComponent.cstate.mode = 'eraser'
+							this.setState({ mode: 'eraser' })
+							this.cstate.mode = 'eraser'
 						}}
 					>
 						<FontAwesome name="eraser" size="2x" />
@@ -66,10 +70,16 @@ export default class SubComponent extends React.Component<Props, State> {
 		socket.on('connect', () => {
 			this.init(socket)
 		})
+
+		injectGlobal`
+		body {
+		background: white;
+	}
+		`
 	}
 
 	init(socket: any) {
-		const { cstate } = SubComponent
+		const { cstate } = this
 		const { room, ox, oy } = this.props
 		if (document === null) {
 			console.error('Not found dom.')
@@ -94,12 +104,12 @@ export default class SubComponent extends React.Component<Props, State> {
 			'gestureend',
 		]
 		events.forEach((func: string) => {
-			document.addEventListener(func, stopDefault, false)
+			// document.addEventListener(func, stopDefault, false)
 		})
 		const c = canvas.getContext('2d')
 
-		const w = (canvas.width = window.innerWidth - pos(canvas).left - 10)
-		const h = (canvas.height = window.innerHeight - pos(canvas).top - 30)
+		const w = (canvas.width = window.innerWidth - pos(canvas).left)
+		const h = (canvas.height = window.innerHeight - pos(canvas).top - 100)
 		const offset = { x: ox - w / 2, y: oy - h / 2 }
 		const canvasStyle = {
 			pencil: { strokeStyle: 'black', lineWidth: 5 },

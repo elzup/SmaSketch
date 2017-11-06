@@ -18,8 +18,6 @@ export const CanvasWrap = styled.div`
 `
 
 export const CanvasCon = styled.div`
-	border: 5px solid #ccc;
-	padding: 5px 10px 10px 10px;
 	position: relative;
 `
 
@@ -44,14 +42,15 @@ export const Head = styled.div`
 
 export const Tools = styled.div`
 	display: flex;
-	height: 50px;
+	background: #eee;
+	height: 90px;
 	width: 100%;
 `
 
 export const Button = styled.button`
 	height: 100%;
 	width: 50%;
-	background: ${p => (p.active ? 'gray' : '#aaa')};
+	background: ${p => (p.active ? '#aaa' : '#ddd')};
+	color: white;
 	border: none;
-	border-radius: 5px;
 `
