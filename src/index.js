@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import queryString from 'query-string'
+import { config } from './config'
 
 import MainComponent from './components/Main'
 import SubComponent from './components/Sub'
@@ -24,7 +25,7 @@ const MainRoot = props => {
 	}
 }
 
-const basename = process.env.NODE_ENV === 'production' ? '/SmaSketch' : '/'
+const { basename } = config
 // Render the main component into the dom
 ReactDOM.render(
 	<Router basename={basename}>
