@@ -24,9 +24,10 @@ const MainRoot = props => {
 	}
 }
 
+const basename = process.env.NODE_ENV === 'production' ? '/SmaSketch' : '/'
 // Render the main component into the dom
 ReactDOM.render(
-	<Router>
+	<Router basename={basename}>
 		<div>
 			<Route exact path="/" component={MainRoot} />
 		</div>
