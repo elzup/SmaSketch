@@ -10,6 +10,9 @@ import SubComponent from './components/Sub'
 import './init'
 
 const MainRoot = props => {
+	// HACKME: GitHub pages don't allow subpath
+	//  can't       /SmaSketch/sub
+	//  alternative /SmaSketch?sub
 	const params = queryString.parse(props.location.search)
 	const isSub = 'sub' in params
 	const room = params.room || 'main'
