@@ -129,7 +129,7 @@ export default class MainComponent extends React.Component<Props> {
 		setInterval(() => {
 			;[0, 1].forEach(i => {
 				nextPos(qrPoses[i])
-				const url = `http://${window.location.host}/sub?ox=${qrPoses[i]
+				const url = `https://${window.location.host}?sub&ox=${qrPoses[i]
 					.x}&oy=${qrPoses[i].y}`
 				qrBoxs[i].innerHTML = qr.imageSync(url, { type: 'svg' })
 				qrBoxs[i].style.top = qrPoses[i].y + 'px'

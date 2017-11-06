@@ -1,7 +1,8 @@
 {
   "name": "SmaSketch",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "homepage": "https://elzup.github.io/SmaSketch/",
   "description": "Smart Sketch board for web",
   "scripts": {
     "start": "react-scripts start",
@@ -21,6 +22,7 @@
     "eslint-plugin-jsx-a11y": "5.0.3",
     "eslint-plugin-react": "7.1.0",
     "flow-bin": "^0.58.0",
+    "gh-pages": "^1.0.0",
     "jsdom": "^11.3.0",
     "prettier": "^1.7.4",
     "qr-image": "^3.1.0",

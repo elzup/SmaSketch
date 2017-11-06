@@ -19,15 +19,14 @@ type Props = {
 
 type State = { mode: string }
 
-// HACKME: canvas and react matching so boad
-//         we use static property for stop rerender
-
 export default class SubComponent extends React.Component<Props, State> {
 	constructor(props: Props) {
 		super(props)
 		this.state = {
 			mode: 'pencil',
 		}
+		// HACKME: canvas and react matching so boad
+		//         we use static property for stop rerender
 		this.cstate = {
 			mode: 'pencil',
 			board: null,
