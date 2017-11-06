@@ -24,8 +24,8 @@ export const CanvasCon = styled.div`
 export const QR = styled.div`
 	width: 100px;
 	height: 100px;
+	background: #103830;
 	position: absolute;
-	background: white;
 `
 
 /* Base Application Styles */
